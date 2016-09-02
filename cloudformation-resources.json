@@ -1,0 +1,83 @@
+{
+  "IamRoleLambda": {
+    "Type": "AWS::IAM::Role",
+    "Properties": {
+      "AssumeRolePolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                "lambda.amazonaws.com"
+              ]
+            },
+            "Action": [
+              "sts:AssumeRole"
+            ]
+          }
+        ]
+      },
+      "Path": "/"
+    }
+  },
+
+  "IamPolicyLambda": {
+    "Type": "AWS::IAM::Policy",
+    "Properties": {
+      "PolicyName": "${stage}-${service}-lambda",
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:${region}:*:*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:PutItem",
+              "dynamodb:GetItem",
+              "dynamodb:Scan",
+              "dynamodb:Query"
+            ],
+            "Resource": "arn:aws:dynamodb:${region}:*:table/${service}-game-${stage}"
+          }
+        ]
+      },
+      "Roles": [
+        {
+          "Ref": "IamRoleLambda"
+        }
+      ]
+    }
+  },
+
+  "GameDynamo": {
+    "Type": "AWS::DynamoDB::Table",
+    "Properties": {
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "gameId",
+          "AttributeType": "S"
+        }
+      ],
+      "KeySchema": [
+        {
+          "AttributeName": "gameId",
+          "KeyType": "HASH"
+        }
+      ],
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      },
+      "TableName": "${service}-game-${stage}"
+    }
+  }
+}
