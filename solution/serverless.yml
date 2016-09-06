@@ -35,8 +35,8 @@ functions:
     handler: handler.createGame
     events:
       - http:     #Add me
-          path: greet #Add me
-          method: get   #Add me
+          path: games #Add me
+          method: post   #Add me
 
 #   you can add any of the following events
 #   events:

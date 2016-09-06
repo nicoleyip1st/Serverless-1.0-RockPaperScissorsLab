@@ -37,11 +37,14 @@ defaults:
 Also change the region in serverless.env.yml to ap-southeast-2
 
 Before we deploy our function we need to connect Serverless to our aws account
+If you have an aws profile set up then you don't need to export the following environment variables (use aws configure if you have the awscli installed)
+If you don't have aws credentials ask for access to the SMS-Non-bill account.
 https://github.com/serverless/serverless/blob/master/docs/guide/provider-account-setup.md#amazon-web-services
-> export AWS_ACCESS_KEY_ID=AKIAIBFNVPHZC33MPGTQ
-> export AWS_SECRET_ACCESS_KEY=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
-> export AWS_DEFAULT_REGION=ap-southeast-2
+> export AWS_ACCESS_KEY_ID=
+> export AWS_SECRET_ACCESS_KEY=
+> SET AWS_DEFAULT_REGION=ap-southeast-2
 Note: These will only last until you close your terminal. If you start a new terminal you will need to re-export these variables.
+Note: For command prompt use SET instead of export
 
 Lets deploy the hello {world} function serverless created for us
 > serverless deploy
@@ -74,7 +77,7 @@ functions:
   hello:
     handler: handler.hello
     events:
-      - http:			#Add me
+      - http:		#Add me
           path: games	#Add me
           method: get 	#Add me
 
